@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Paper Generator - Government Polytechnic Ahmedabad</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>GOVERNMENT POLYTECHNIC AHMEDABAD</h1>
+                <p class="subtitle">Question Paper Generator</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="card">
+                    <h2>Step 1: Upload Unit PDF</h2>
+                    <div class="upload-area" id="uploadArea">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p>Drag and drop your PDF here or click to browse</p>
+                        <p class="file-info">Accepted format: PDF only</p>
+                        <input type="file" id="pdfInput" accept=".pdf" hidden>
+                    </div>
+                    <div id="uploadStatus" class="upload-status"></div>
+                </div>
+            </section>
+
+            <!-- Question Input Section -->
+            <section class="questions-section">
+                <div class="card">
+                    <h2>Step 2: Add Questions or Extract from PDF</h2>
+                    
+                    <div class="question-controls">
+                        <button class="btn btn-primary" id="extractBtn">Extract from PDF</button>
+                        <span class="divider">OR</span>
+                        <button class="btn btn-secondary" id="addManualBtn">Add Manually</button>
+                    </div>
+
+                    <!-- Manual Question Input -->
+                    <div id="manualInput" class="manual-input" style="display: none;">
+                        <div class="question-form">
+                            <div class="form-group">
+                                <label>Question Text:</label>
+                                <textarea id="questionText" placeholder="Enter question" rows="3"></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Question Type:</label>
+                                    <select id="questionType">
+                                        <option value="MCQ">MCQ (Section A)</option>
+                                        <option value="Brief">Brief Answer (Section B)</option>
+                                        <option value="Short">Short Answer (Section C)</option>
+                                        <option value="Long">Long Answer (Section D)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Marks:</label>
+                                    <input type="number" id="questionMarks" min="1" max="20" placeholder="Marks">
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="mcqOptions" style="display: none;">
+                                <label>MCQ Options (one per line):</label>
+                                <textarea id="mcqOptionsText" placeholder="Option A&#10;Option B&#10;Option C&#10;Option D" rows="4"></textarea>
+                                <input type="number" id="correctAnswer" min="1" max="4" placeholder="Correct option (1-4)" style="display: none;">
+                            </div>
+
+                            <button class="btn btn-success" id="addQuestionBtn">Add Question</button>
+                        </div>
+                    </div>
+
+                    <!-- Questions List -->
+                    <div class="questions-list">
+                        <h3>Questions Added (<span id="questionCount">0</span>)</h3>
+                        <div id="questionsContainer" class="questions-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Generation Settings -->
+            <section class="settings-section">
+                <div class="card">
+                    <h2>Step 3: Configure Question Paper</h2>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <h4>Section A - MCQ</h4>
+                            <p class="marks-info">Total Marks: 14 (1 mark each)</p>
+                            <input type="number" id="sectionACount" min="1" max="20" value="14" placeholder="Number of questions">
+                        </div>
+
+                        <div class="setting-item">
+                            <h4>Section B - Brief Answer</h4>
+                            <p class="marks-info">Total Marks: 16 (4 marks each)</p>
+                            <input type="number" id="sectionBCount" min="1" max="10" value="4" placeholder="Number of questions">
+                        </div>
+
+                        <div class="setting-item">
+                            <h4>Section C - Short Answer</h4>
+                            <p class="marks-info">Total Marks: 15 (3 marks each)</p>
+                            <input type="number" id="sectionCCount" min="1" max="10" value="5" placeholder="Number of questions">
+                        </div>
+
+                        <div class="setting-item">
+                            <h4>Section D - Long Answer</h4>
+                            <p class="marks-info">Total Marks: 15 (5 marks each)</p>
+                            <input type="number" id="sectionDCount" min="1" max="10" value="3" placeholder="Number of questions">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Subject Name:</label>
+                        <input type="text" id="subjectName" placeholder="e.g., Data Structures" value="Data Structures">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Unit/Chapter:</label>
+                        <input type="text" id="unitName" placeholder="e.g., Unit 1 - Arrays" value="Unit 1">
+                    </div>
+
+                    <button class="btn btn-generate" id="generateBtn">Generate Question Paper</button>
+                </div>
+            </section>
+
+            <!-- Preview Section -->
+            <section class="preview-section" id="previewSection" style="display: none;">
+                <div class="card">
+                    <h2>Generated Question Paper Preview</h2>
+                    <div class="preview-controls">
+                        <button class="btn btn-print" id="printBtn">Print/Download as PDF</button>
+                        <button class="btn btn-secondary" id="editBtn">Edit</button>
+                    </div>
+                    <div id="paperPreview" class="paper-preview"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Question Paper Generator. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
